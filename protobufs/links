@@ -4,3 +4,5 @@ docker build . -f pleco_target/Dockerfile -t pleco_target
 
 docker run -p 192.168.50.184:50051:50051/tcp pleco_target
 docker run -p 192.168.50.13:50051:50051/tcp pleco_target
+
+python3 -m pip install -r requirements.txt
