@@ -1,0 +1,6 @@
+python -m grpc_tools.protoc -I ../protobufs --python_out=. --grpc_python_out=. ../protobufs/pleco_target.proto
+
+docker build . -f pleco_target/Dockerfile -t pleco_target
+
+docker run -p 192.168.50.184:50051:50051/tcp pleco_target
+docker run -p 192.168.50.13:50051:50051/tcp pleco_target
