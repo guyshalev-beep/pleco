@@ -4,20 +4,6 @@ from pleco_target_pb2 import K8sGWRequest
 from pleco_target_pb2_grpc import K8sGWStub
 
 
-def print_hi(name):
-    from kubernetes import client, config
-
-    # Configs can be set in Configuration class directly or using helper utility
-    config.load_kube_config()
-
-    v1 = client.CoreV1Api()
-    print("Listing pods with their IPs:")
-    ret = v1.list_pod_for_all_namespaces(watch=False)
-    for i in ret.items:
-        print("%s\t%s\t%s" % (i.status.pod_ip, i.metadata.namespace, i.metadata.name))
-
-
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     print('start')
     channel = grpc.insecure_channel("192.168.50.184:50051")
@@ -28,8 +14,8 @@ if __name__ == '__main__':
         fileName="yaml/sample.yaml1"
     )
     # Get Namespaces - TODO
-    #ret = client.GetNSs(request)
-    #print (ret)
+    ret = client.GetNSs(request)
+    print (ret)
 
     print ("create deployment")
     deploymentRes = client.ApplyDeployment(K8sGWRequest(fileName="yaml/hello-world-deployment.yaml", namespace="test"))
