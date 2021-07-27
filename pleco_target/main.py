@@ -10,11 +10,9 @@ if __name__ == '__main__':
     #channel = grpc.insecure_channel("localhost:50051")
 
     client = K8sGWStub(channel)
-    request = K8sGWRequest(
-        fileName="yaml/sample.yaml1"
-    )
+
     # Get Namespaces - TODO
-    ret = client.GetNSs(request)
+    ret = client.GetNSs(K8sGWRequest())
     print (ret)
 
     print ("create deployment")
