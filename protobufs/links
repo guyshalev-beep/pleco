@@ -14,8 +14,7 @@ python3 -m pip install -r requirements.txt
     configuration.host = 'https://192.168.50.184:6443'
     configuration.verify_ssl = False
     configuration.debug = True
-    #configuration.username = 'guy'
-    #configuration.password = 'Canon6dd'
+
     configuration.api_key_prefix['authorization'] = 'Bearer'
     configuration.api_key = {ApiToken}
 
