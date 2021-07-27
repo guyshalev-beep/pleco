@@ -5,8 +5,7 @@ metadata:
   labels:
     app.kubernetes.io/name: load-balancer-example
   name: my-service
-  namespace: testns
-  resourceVersion: "794492"
+
   uid: d6e417a5-a642-45d2-a100-74c763af7c3d
 spec:
   clusterIP: 10.110.143.234

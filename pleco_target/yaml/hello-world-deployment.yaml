@@ -10,8 +10,7 @@ metadata:
   labels:
     app.kubernetes.io/name: load-balancer-example
   name: hello-world
-  namespace: testns
-  resourceVersion: "29117"
+  namespace: test
   uid: 421b7c24-956a-42ac-b946-02a0352092d5
 spec:
   progressDeadlineSeconds: 600
