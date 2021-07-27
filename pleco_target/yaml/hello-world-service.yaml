@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: "2021-07-27T11:11:01Z"
+  labels:
+    app.kubernetes.io/name: load-balancer-example
+  name: my-service
+
+  uid: d6e417a5-a642-45d2-a100-74c763af7c3d
+spec:
+  clusterIP: 10.110.143.234
+  clusterIPs:
+  - 10.110.143.234
+  externalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - nodePort: 30226
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app.kubernetes.io/name: load-balancer-example
+  sessionAffinity: None
+  type: LoadBalancer
+status:
+  loadBalancer:
+    ingress:
+    - hostname: localhost
