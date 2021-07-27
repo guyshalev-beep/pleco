@@ -20,9 +20,9 @@ def print_hi(name):
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     print('start')
-
-    #channel = grpc.insecure_channel("192.168.50.13:50051")
-    channel = grpc.insecure_channel("localhost:50051")
+    #print_hi("")
+    channel = grpc.insecure_channel("192.168.50.184:50051")
+    #channel = grpc.insecure_channel("localhost:50051")
     client = RecommendationsStub(channel)
 
     request = RecommendationRequest(
@@ -34,6 +34,7 @@ if __name__ == '__main__':
     request = K8sGWRequest(
         user_id=1,  max_results=3
     )
+    print ("just a sec")
     ret = client.GetNSs(request)
     print (ret)
     """
@@ -47,5 +48,5 @@ if __name__ == '__main__':
     """
     #print (client.GetNSs(request))
 
-    #print_hi("")
+
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
