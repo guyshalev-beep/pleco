@@ -29,7 +29,12 @@ class K8sGWService(
             print (e)
 
     def GetNSs(self, request, context):
-        self.config_client()
+        try:
+            self.config_client()
+        except:
+            e = sys.exc_info()
+            print (e)
+            return K8sGWResponse(status=False, msg=str(e))
         print ("after config")
         v1 = client.CoreV1Api()
         dicto ={}

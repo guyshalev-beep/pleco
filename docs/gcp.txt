@@ -2,7 +2,7 @@ Setup terraform:
 configure terraform: https://registry.terraform.io/providers/hashicorp/google/latest/docs/guides/provider_reference
 create service account: https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances
 get the key of the service account
-set the key to env:  $Env:Path += ";c:\temp"
+set the key to env:  $Env:GOOGLE_APPLICATION_CREDENTIALS += "$HOME/pleco/pleco1-d8536d6e553c"
 Running Terraform outside of Google Cloud
 If you are running terraform outside of Google Cloud, generate a service account key and set the GOOGLE_APPLICATION_CREDENTIALS environment variable to the path of the service account key. Terraform will use that key for authentication.
 
@@ -18,3 +18,4 @@ Install Docker
  LOGOUT
 
 
+Add to Firewall rule with all traffic
