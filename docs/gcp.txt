@@ -1,0 +1,20 @@
+Setup terraform:
+configure terraform: https://registry.terraform.io/providers/hashicorp/google/latest/docs/guides/provider_reference
+create service account: https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances
+get the key of the service account
+set the key to env:  $Env:Path += ";c:\temp"
+Running Terraform outside of Google Cloud
+If you are running terraform outside of Google Cloud, generate a service account key and set the GOOGLE_APPLICATION_CREDENTIALS environment variable to the path of the service account key. Terraform will use that key for authentication.
+
+Disabling mtls authentication
+mtls authentication will soon become enabled by default if your system supports it. To disable mtls authentication at any point set GOOGLE_API_USE_CLIENT_CERTIFICATE to false.
+
+Install Docker
+ curl -fsSL https://get.docker.com -o get-docker.sh
+ sudo sh get-docker.sh
+
+ sudo groupadd docker
+ sudo usermod -aG docker ${USER}
+ LOGOUT
+
+

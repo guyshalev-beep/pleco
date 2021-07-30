@@ -22,7 +22,8 @@ class K8sGWService(
 ):
     def config_client(self):
         try:
-            config.load_kube_config('config')
+            #config.load_kube_config('config')
+            config.load_kube_config('$HOME/.kube/config')
         except:
             e = sys.exc_info()
             print (e)
