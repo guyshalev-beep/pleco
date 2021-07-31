@@ -21,12 +21,8 @@ class K8sGWService(
     pleco_target_pb2_grpc.K8sGWServicer
 ):
     def config_client(self):
-        try:
-            #config.load_kube_config('config')
-            config.load_kube_config('$HOME/.kube/config')
-        except:
-            e = sys.exc_info()
-            print (e)
+       config.load_kube_config('config4')
+
 
     def GetNSs(self, request, context):
         try:
@@ -37,7 +33,7 @@ class K8sGWService(
             return K8sGWResponse(status=False, msg=str(e))
         print ("after config")
         v1 = client.CoreV1Api()
-        dicto ={}
+        dicto = {}
         try:
             ret = v1.list_namespace(watch=False)
             for i in ret.items:
@@ -46,6 +42,7 @@ class K8sGWService(
         except:
             e = sys.exc_info()
             print (e)
+            return K8sGWResponse(status=False, msg=str(e))
 
         print ("after")
 
@@ -67,7 +64,7 @@ class K8sGWService(
         except:
             e = sys.exc_info()
             return K8sGWResponse(status=False, msg=str(e))
-        return K8sGWResponse(status=False, msg="failed to create deployment '%s'" % request.fileName)
+        #return K8sGWResponse(status=False, msg="failed to create deployment '%s'" % request.fileName)
 
     def ApplyService(self, request, context):
         print ("start apply service")
@@ -85,9 +82,8 @@ class K8sGWService(
         except:
             e = sys.exc_info()
             return K8sGWResponse(status=False, msg=str(e))
-        print ("after")
 
-        return K8sGWResponse(status=False, msg="failed to create service")
+        #return K8sGWResponse(status=False, msg="failed to create service")
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     pleco_target_pb2_grpc.add_K8sGWServicer_to_server(

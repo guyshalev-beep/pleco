@@ -1,3 +1,18 @@
+Tools
+Yum:
+sudo apt-get install yum
+Telnet:
+apt-get install telnet
+
+run shell on container:
+docker exec -it name /bin/bash
+
+PAYING ACCOUNTS:
+AWS:guy@plec-o.com
+GOOGLE: guy@plec-o.com - old
+pleco3007@shalev-family.com
+
+
 Setup terraform:
 configure terraform: https://registry.terraform.io/providers/hashicorp/google/latest/docs/guides/provider_reference
 create service account: https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances
@@ -19,3 +34,6 @@ Install Docker
 
 
 Add to Firewall rule with all traffic
+
+Install Kind
+Install
