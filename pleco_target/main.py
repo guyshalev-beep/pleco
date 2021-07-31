@@ -7,14 +7,18 @@ from pleco_target_pb2_grpc import K8sGWStub
 if __name__ == '__main__':
     print('start')
     #channel = grpc.insecure_channel("192.168.15.207:50051")
-    #channel = grpc.insecure_channel("192.168.50.13:50051")
-    channel = grpc.insecure_channel("34.67.36.81:50051")
+    channel = grpc.insecure_channel("192.168.50.13:50051")
+    #channel = grpc.insecure_channel("34.135.130.51:50051")
+
 
     client = K8sGWStub(channel)
 
-    # Get Namespaces - TODO
+    print("Test")
+    ret = client.TestConnection(K8sGWRequest())
+    print (ret)
+
     print("Get NS")
-    ret = client.GetNSs(K8sGWRequest())
+    ret = client.GetNSs(K8sGWRequest(config_file="config_dir/config-gcp2"))
     print (ret)
 
     print ("create deployment")

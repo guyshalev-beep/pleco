@@ -29,6 +29,11 @@ class K8sGWStub(object):
                 request_serializer=pleco__target__pb2.K8sGWRequest.SerializeToString,
                 response_deserializer=pleco__target__pb2.K8sGWResponse.FromString,
                 )
+        self.TestConnection = channel.unary_unary(
+                '/K8sGW/TestConnection',
+                request_serializer=pleco__target__pb2.K8sGWRequest.SerializeToString,
+                response_deserializer=pleco__target__pb2.K8sGWResponse.FromString,
+                )
 
 
 class K8sGWServicer(object):
@@ -52,6 +57,12 @@ class K8sGWServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def TestConnection(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_K8sGWServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -67,6 +78,11 @@ def add_K8sGWServicer_to_server(servicer, server):
             ),
             'ApplyService': grpc.unary_unary_rpc_method_handler(
                     servicer.ApplyService,
+                    request_deserializer=pleco__target__pb2.K8sGWRequest.FromString,
+                    response_serializer=pleco__target__pb2.K8sGWResponse.SerializeToString,
+            ),
+            'TestConnection': grpc.unary_unary_rpc_method_handler(
+                    servicer.TestConnection,
                     request_deserializer=pleco__target__pb2.K8sGWRequest.FromString,
                     response_serializer=pleco__target__pb2.K8sGWResponse.SerializeToString,
             ),
@@ -126,6 +142,23 @@ class K8sGW(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/K8sGW/ApplyService',
+            pleco__target__pb2.K8sGWRequest.SerializeToString,
+            pleco__target__pb2.K8sGWResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def TestConnection(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/K8sGW/TestConnection',
             pleco__target__pb2.K8sGWRequest.SerializeToString,
             pleco__target__pb2.K8sGWResponse.FromString,
             options, channel_credentials,

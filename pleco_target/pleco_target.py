@@ -20,13 +20,16 @@ import pleco_target_pb2_grpc
 class K8sGWService(
     pleco_target_pb2_grpc.K8sGWServicer
 ):
-    def config_client(self):
-       config.load_kube_config('config4')
+    def config_client(self, config_file):
+       config.load_kube_config(config_file)
 
+    def TestConnection(self, request, context):
+        return K8sGWResponse(status=True, msg="connection succeed. cwd:'%s'" % os.getcwd())
 
     def GetNSs(self, request, context):
+        print("start ns config")
         try:
-            self.config_client()
+            self.config_client(request.config_file)
         except:
             e = sys.exc_info()
             print (e)

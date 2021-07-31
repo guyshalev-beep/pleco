@@ -5,8 +5,8 @@ provider "google" {
 }
 
 resource "google_compute_instance" "vm_instance" {
-  name         = "terraform-instance"
-  machine_type = "e2-micro"
+  name         = "pleco-instance"
+  machine_type = "e2-standard-2"
 
   boot_disk {
     initialize_params {
