@@ -6,9 +6,10 @@ from pleco_target_pb2_grpc import K8sGWStub
 
 if __name__ == '__main__':
     print('start')
+
     #channel = grpc.insecure_channel("192.168.15.207:50051")
-    channel = grpc.insecure_channel("192.168.50.13:50051")
-    #channel = grpc.insecure_channel("34.135.130.51:50051")
+    #channel = grpc.insecure_channel("192.168.50.13:50051")
+    channel = grpc.insecure_channel("34.70.231.109:50051")
 
 
     client = K8sGWStub(channel)
@@ -16,19 +17,19 @@ if __name__ == '__main__':
     print("Test")
     ret = client.TestConnection(K8sGWRequest())
     print (ret)
-
+    """
     print("Get NS")
     ret = client.GetNSs(K8sGWRequest(config_file="config_dir/config-gcp2"))
     print (ret)
-
+ """
     print ("create deployment")
-    deploymentRes = client.ApplyDeployment(K8sGWRequest(fileName="yaml/hello-world-deployment.yaml", namespace="test"))
+    deploymentRes = client.ApplyDeployment(K8sGWRequest(fileName="yaml/hw.yaml", namespace="default"))
     print (deploymentRes)
-
+    """
     print ("create service ")
     serviceRes = client.ApplyService(K8sGWRequest(fileName="yaml/hello-world-service.yaml", namespace="default"))
     print (serviceRes)
-    """
+    
     channel = grpc.insecure_channel("192.168.50.13:50051")
     client = K8sGWStub(channel)
 
@@ -38,6 +39,7 @@ if __name__ == '__main__':
     print (client.GetNSs(request))
     """
     #print (client.GetNSs(request))
+
 
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/

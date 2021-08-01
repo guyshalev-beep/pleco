@@ -75,9 +75,26 @@ data:
 EOF
 
 docker pull guypleco/aws:lts
-docker run -d -p 10.10.0.7:50051:50051 guypleco/aws:lts
+docker run -d -p 10.10.0.8:50051:50051 guypleco/aws:lts
 
 
 
 changes to 2
 Dynamic routing modeGlobal
+
+# Check all possible clusters, as your .KUBECONFIG may have multiple contexts:
+kubectl config view -o jsonpath='{"Cluster name\tServer\n"}{range .clusters[*]}{.name}{"\t"}{.cluster.server}{"\n"}{end}'
+
+# Select name of cluster you want to interact with from above output:
+export CLUSTER_NAME="gke_pleco1_us-central1_pleco1-gke"
+
+# Point to the API server referring the cluster name
+APISERVER=$(kubectl config view -o jsonpath="{.clusters[?(@.name==\"$CLUSTER_NAME\")].cluster.server}")
+
+# Gets the token value
+TOKEN=$(kubectl get secrets -o jsonpath="{.items[?(@.metadata.annotations['kubernetes\.io/service-account\.name']=='default')].data.token}"|base64 --decode)
+echo $APISERVER
+echo $TOKEN
+
+# Explore the API with TOKEN
+curl -X GET $APISERVER/api --header "Authorization: Bearer $TOKEN" --insecure
