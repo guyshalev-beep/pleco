@@ -3,7 +3,7 @@ kind: Service
 metadata:
   annotations:
     kubectl.kubernetes.io/last-applied-configuration: |
-      {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"app":"yelb-ui","tier":"frontend"},"name":"yelb-ui","namespace":"yelb"},"spec":{"ports":[{"nodePort":30001,"port":80,"protocol":"TCP","targetPort":80}],"selector":{"app":"yelb-ui","tier":"frontend"},"type":"NodePort"}}
+      {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"app":"yelb-ui","tier":"frontend"},"name":"yelb-ui","namespace":"yelb"},"spec":{"ports":[{"port":80,"protocol":"TCP","targetPort":80}],"selector":{"app":"yelb-ui","tier":"frontend"},"type":"LoadBalancer"}}
   creationTimestamp: "2021-08-01T14:45:55Z"
   labels:
     app: yelb-ui
@@ -17,7 +17,7 @@ spec:
   - IPv4
   ipFamilyPolicy: SingleStack
   ports:
-  - nodePort: 30001
+  - nodePort: 30795
     port: 80
     protocol: TCP
     targetPort: 80
@@ -25,7 +25,7 @@ spec:
     app: yelb-ui
     tier: frontend
   sessionAffinity: None
-  type: NodePort
+  type: LoadBalancer
 status:
   loadBalancer:
     ingress:
