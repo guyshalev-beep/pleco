@@ -92,3 +92,17 @@ data:
       - 172.18.255.200-172.18.255.250
 EOF
 
+Working State:
+deployed on 1 Node
+7929e4d0deed   guypleco/aws:lts   "python pleco_target…"   2 hours ago   Up 2 hours   10.10.0.14:50051->50051/tcp
+ ecstatic_engelbart
+
+Internal IP 10.10.0.14 (nic0)
+External IP 104.197.16.122
+
+Main:
+ho = "107.178.210.34"
+po:443
+channel = grpc.insecure_channel("104.197.16.122:50051") #GCP
+
+

@@ -16,8 +16,10 @@ if __name__ == '__main__':
     to = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjY2MmtSRElYaVFfcUZiT2VwS3VGbEpjQ1VlaWctb3h0ZHVuOGdDMGMwb1EifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImRlZmF1bHQtdG9rZW4teHJkZ2ciLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiZGVmYXVsdCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6IjYwYjhmMDUxLTc2MTMtNDE1ZC05NzgwLWY1MTBjMDEzNGQyYyIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDpkZWZhdWx0OmRlZmF1bHQifQ.O8frRG_Mhhb5vTOaDKvbL9v93K2KoCQdBJiS1lLbD0z9sXJowMcc6wSXP4Vky2gE_gn43Ua9AVbyZ-BAKxO91yIDdLaZlan6optoJczFXJgZxuGHNqrP1arjjiss5lTHgQjEiYTaU9bHNvNDSuZmuim34pBZqZNkVLwnTd0ypsU0eqOM-BsvpmS9DrU4ZKgrVRcm2x96e9_poHhq91wK03GuINjAcjIq97ccIjLjm3jZGSn6l-v0Fl0qH3KyvljE3Q_9kmMevkvAm6rAsXxlcdt8Z98WRvg_rHyA0rRQNiA3LVjYY5HqeVSKIuQR02NBp8-3Zqd3HZFhVtJxYv9kcQ"
 #TAL
     ho = "127.0.0.1"
+    ho = "192.168.50.184"
 #GCP
     ho = "107.178.210.34"
+
     #ho = "34.135.3.153"
 
     po = "443"
@@ -31,10 +33,31 @@ if __name__ == '__main__':
     ret = client.GetNSs(K8sGWRequest(config_file="config_dir/config-gcp2", client_host=ho, client_port=po, client_token=to))
     print (ret)
 
+    print ("create yelb")
+    deploymentRes = client.ApplyDeployment(K8sGWRequest(fileName="yaml/redis-server-deployment.yaml", namespace="yelb", client_host=ho, client_port=po, client_token=to))
+    print(deploymentRes)
+    serviceRes = client.ApplyService(K8sGWRequest(fileName="yaml/redis-server-service.yaml", namespace="yelb", client_host=ho, client_port=po, client_token=to))
+    print (serviceRes)
+    deploymentRes = client.ApplyDeployment(K8sGWRequest(fileName="yaml/yelb-appserver-deployment.yaml", namespace="yelb", client_host=ho, client_port=po, client_token=to))
+    print(deploymentRes)
+    serviceRes = client.ApplyService(K8sGWRequest(fileName="yaml/yelb-appserver-service.yaml", namespace="yelb", client_host=ho, client_port=po, client_token=to))
+    print (serviceRes)
+    deploymentRes = client.ApplyDeployment(K8sGWRequest(fileName="yaml/yelb-db-deployment.yaml", namespace="yelb", client_host=ho, client_port=po, client_token=to))
+    print(deploymentRes)
+    serviceRes = client.ApplyService(K8sGWRequest(fileName="yaml/yelb-db-service.yaml", namespace="yelb", client_host=ho, client_port=po, client_token=to))
+    print (serviceRes)
+    deploymentRes = client.ApplyDeployment(K8sGWRequest(fileName="yaml/yelb-ui-deployment.yaml", namespace="yelb", client_host=ho, client_port=po, client_token=to))
+    print(deploymentRes)
+    serviceRes = client.ApplyService(K8sGWRequest(fileName="yaml/yelb-ui-service.yaml", namespace="yelb", client_host=ho, client_port=po, client_token=to))
+    print (serviceRes)
+
+
+
+    """
     print ("create deployment")
     deploymentRes = client.ApplyDeployment(K8sGWRequest(fileName="yaml/hw.yaml", namespace="default", client_host=ho, client_port=po, client_token=to))
     print (deploymentRes)
-    """
+    
     print ("create service ")
     serviceRes = client.ApplyService(K8sGWRequest(fileName="yaml/hello-world-service.yaml", namespace="default"))
     print (serviceRes)

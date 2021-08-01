@@ -12,9 +12,6 @@ metadata:
   namespace: yelb
   uid: 118f1127-ba3c-482c-bdc1-89bfaf8f3ae0
 spec:
-  clusterIP: 10.99.24.161
-  clusterIPs:
-  - 10.99.24.161
   externalTrafficPolicy: Cluster
   ipFamilies:
   - IPv4

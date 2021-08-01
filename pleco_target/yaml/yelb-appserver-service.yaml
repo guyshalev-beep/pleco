@@ -12,9 +12,6 @@ metadata:
   namespace: yelb
   uid: c09c8193-463e-4fa5-954d-bc5ec951e420
 spec:
-  clusterIP: 10.101.14.248
-  clusterIPs:
-  - 10.101.14.248
   ipFamilies:
   - IPv4
   ipFamilyPolicy: SingleStack
