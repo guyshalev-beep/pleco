@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"app":"redis-server","tier":"cache"},"name":"redis-server","namespace":"yelb"},"spec":{"ports":[{"port":6379}],"selector":{"app":"redis-server","tier":"cache"},"type":"ClusterIP"}}
+  creationTimestamp: "2021-08-01T14:45:55Z"
+  labels:
+    app: redis-server
+    tier: cache
+  name: redis-server
+  namespace: yelb
+  uid: e8d85af9-f695-4ccb-bc2f-cec8cff0f83b
+spec:
+  clusterIP: 10.100.166.250
+  clusterIPs:
+  - 10.100.166.250
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - port: 6379
+    protocol: TCP
+    targetPort: 6379
+  selector:
+    app: redis-server
+    tier: cache
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}
