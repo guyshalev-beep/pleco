@@ -23,20 +23,19 @@ class K8sGWService(
     def config_client(self, config_file):
        config.load_kube_config(config_file)
 
-    def config_client_token(self):
+    def config_client_token(self, client_token, client_host, client_port):
         import urllib3
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
         # Define the bearer token we are going to use to authenticate.
         # See here to create the token:
         # https://kubernetes.io/docs/tasks/access-application-cluster/access-cluster/
-        aToken = "eyJhbGciOiJSUzI1NiIsImtpZCI6IlFBR1p2NS1LTzVkb05xQ3VES25fcTJtZmtVZG5LNXRXektXQ05ZUjI0c0kifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImRlZmF1bHQtdG9rZW4taHc0aGYiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiZGVmYXVsdCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6IjZlMTYyZDk4LWRjOGEtNDQ1Ni05MGUwLTllZGFmYjRjMDQ4NSIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDpkZWZhdWx0OmRlZmF1bHQifQ.4YBJ5UBECgLyB-Ex1Uj_u23EdQnR11u4JPMFpTQCqe8Rql7AKhbn4PLxnWOsgIYuENVpYqLXKpnbrzZ7kJeFnb00vnZvoIr4KyVATVlyU0OU3mxYXSTKIupCjhqebb4IudAdFHC1Pe52rA6sDAWjrtx8auHTRC0R0P1jV8p7zUJQB5zhrZYY8mJMqBF8Iqd8XMh-Jwx2cyCwfTwH3rDkXDnAJyvUowhC_1zPQWluBr3Yl-BIgWEYY6nq9q6knJfe7Fy1WfkCLlS1b_Dlvnt7tyjiyF16mp2JVWdvFpFwC9HKoxOCxi4LzmqVstVueHliZv2owiHmEVmuF_jendx-Jw"
-
+        aToken = client_token
         # Create a configuration object
         aConfiguration = client.Configuration()
 
         # Specify the endpoint of your Kube cluster
-        aConfiguration.host = "https://34.68.232.48:443"
-
+        aConfiguration.host = "https://%s:%s" % (client_host, client_port)
+        print(aConfiguration.host)
         # Security part.
         # In this simple example we are not going to verify the SSL certificate of
         # the remote cluster (for simplicity reason)
@@ -52,6 +51,7 @@ class K8sGWService(
 
 
     def TestConnection(self, request, context):
+        """
         aConfiguration = self.config_client_token()
         # Create a ApiClient with our config
         #v1 = client.ApiClient(aConfiguration, header_name="Accept", header_value=["application/xml", "application/json"])
@@ -74,21 +74,26 @@ class K8sGWService(
             e = sys.exc_info()
             print (e)
             return K8sGWResponse(status=False, msg=str(e))
+            """
         return K8sGWResponse(status=True, msg="connection succeed. cwd:'%s'" % os.getcwd())
 
     def GetNSs(self, request, context):
         print("start ns config")
         try:
            # self.config_client(request.config_file)
-            aConfiguration = self.config_client_token()
+            aConfiguration = self.config_client_token(client_host=request.client_host, client_port=request.client_port, client_token=request.client_token)
 
         except:
             e = sys.exc_info()
             print (e)
             return K8sGWResponse(status=False, msg=str(e))
         print ("after config")
+        my_api_client = client.ApiClient(aConfiguration)
+        my_api_client.select_header_accept(
+            ["", "application/json", "application/yaml", "application/vnd.kubernetes.protobuf"])
+
         v1 = client.CoreV1Api(aConfiguration)
-        v1.select_header_accept(["application/xml", "application/json"])
+        v1.__init__(api_client=my_api_client)
         #v1 = client.CoreV1Api()
         dicto = {}
         try:
@@ -108,7 +113,8 @@ class K8sGWService(
     def ApplyDeployment(self, request, context):
         print ("start apply deployment")
         #self.config_client()
-        aConfiguration = self.config_client_token()
+        aConfiguration = self.config_client_token(client_host=request.client_host, client_port=request.client_port,
+                                                  client_token=request.client_token)
 
         print ("after config")
         print (request.fileName)

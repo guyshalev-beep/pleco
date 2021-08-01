@@ -9,6 +9,9 @@ message K8sGWRequest {
     string fileName = 3;
     string namespace = 4;
     string config_file = 5;
+    string client_token = 6;
+    string client_host = 7;
+    string client_port = 8;
 }
 message K8sGWResponse {
     repeated string resources = 1;

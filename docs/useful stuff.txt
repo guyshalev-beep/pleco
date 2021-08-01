@@ -1,0 +1,33 @@
+Tools
+-----------
+Yum:
+sudo apt-get install yum
+Telnet:
+apt-get install telnet
+
+Commands:
+------------
+run shell on container:
+docker exec -it name /bin/bash
+
+PAYING ACCOUNTS:
+----------------
+AWS:guy@plec-o.com
+GOOGLE: guy@plec-o.com - old
+pleco3007@shalev-family.com
+
+IDE:
+-----------------
+Gen Files:
+python -m grpc_tools.protoc -I ../protobufs --python_out=. --grpc_python_out=. ../protobufs/pleco_target.proto
+
+Build:
+docker build . -f pleco_target/Dockerfile -t pleco_target
+
+Create Env & Requirements:
+python3 -m pip install -r requirements.txt
+
+Docker:
+------------------
+docker pull guypleco/aws:lts
+docker run -d -p 10.10.0.8:50051:50051 guypleco/aws:lts
