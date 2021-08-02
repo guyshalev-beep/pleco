@@ -4,7 +4,7 @@ configure terraform: https://registry.terraform.io/providers/hashicorp/google/la
 create service account: https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances
 get the key of the service account
 set the key to env:  $Env:GOOGLE_APPLICATION_CREDENTIALS += "$HOME/pleco/pleco1-03fa8c3141cd.json"
-$Env:GOOGLE_APPLICATION_CREDENTIALS += "d:\\dev\\pleco\\gcp\\pleco1-03fa8c3141cd.json"
+$Env:GOOGLE_APPLICATION_CREDENTIALS = "d:\\dev\\pleco\\gcp\\pleco1-03fa8c3141cd.json"
 Running Terraform outside of Google Cloud
 If you are running terraform outside of Google Cloud, generate a service account key and set the GOOGLE_APPLICATION_CREDENTIALS environment variable to the path of the service account key. Terraform will use that key for authentication.
 
@@ -43,7 +43,6 @@ Service Account Permission:
 kubectl create clusterrolebinding serviceaccounts-cluster-admin \
   --clusterrole=cluster-admin \
   --group=system:serviceaccounts
-
 
 
 For Stand Alone KIND Clusters:
