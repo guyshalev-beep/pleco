@@ -4,7 +4,7 @@ configure terraform: https://registry.terraform.io/providers/hashicorp/google/la
 create service account: https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances
 get the key of the service account
 set the key to env:  $Env:GOOGLE_APPLICATION_CREDENTIALS += "$HOME/pleco/pleco1-03fa8c3141cd.json"
-$Env:GOOGLE_APPLICATION_CREDENTIALS = "d:\\dev\\pleco\\gcp\\pleco1-03fa8c3141cd.json"
+$Env:GOOGLE_APPLICATION_CREDENTIALS="d:\\dev\\pleco\\gcp\\pleco-322305-49e9fee21dca.json"
 Running Terraform outside of Google Cloud
 If you are running terraform outside of Google Cloud, generate a service account key and set the GOOGLE_APPLICATION_CREDENTIALS environment variable to the path of the service account key. Terraform will use that key for authentication.
 
@@ -25,7 +25,7 @@ Get APISERVER & TOKEN:
 kubectl config view -o jsonpath='{"Cluster name\tServer\n"}{range .clusters[*]}{.name}{"\t"}{.cluster.server}{"\n"}{end}'
 
 # Select name of cluster you want to interact with from above output:
-export CLUSTER_NAME="gke_pleco1_us-central1_pleco1-gke"
+export CLUSTER_NAME="gke_oldpleco_us-west2-a_west"
 
 # Point to the API server referring the cluster name
 APISERVER=$(kubectl config view -o jsonpath="{.clusters[?(@.name==\"$CLUSTER_NAME\")].cluster.server}")
@@ -37,6 +37,9 @@ echo $TOKEN
 
 # Explore the API with TOKEN
 curl -X GET $APISERVER/api --header "Authorization: Bearer $TOKEN" --insecure
+
+curl -X GET  https://34.70.180.27/api --header "Authorization: Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IlI1bFJsLTJXNkR5MWV2VGlpajdoNEtsazNRT0pSUzVHa3VCTWQ2QkZ3eHcifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImRlZmF1bHQtdG9rZW4tZzl3am0iLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiZGVmYXVsdCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6ImU4ZjQ3YWUyLTljOTgtNDkxMC05YWVkLTVjNmQ5OTU4MDhlOSIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDpkZWZhdWx0OmRlZmF1bHQifQ.kSKQAAb5n2v4jvrppGPPlycMVx6mP59PUzBkdmbpEI8cTXbPfBouGRmUEtaK8IE55G_h08RylzocSOL3Fnl5Fkb8om_vzuGAuKbSCyccIjRP8Zu7Mxp-1eesP7gOYqiB8aMpptCGJ6ChlKF2UNyJttRj2B_VvXff2SBGW4EbJ-8Ew2TNDzXwhTHVojvdHF3-8986D-96VScX9yBuJ9nYV5p-oPkRMXl2LLajSSkOaBnxIt63dMm_s6ZtWyIx2ixBxo8lMsuU2VWePslX_XfWT3Hh289Z3LyaKUl9ibeKwybwqMcclcmlsT0hgErQbCajWDObsantk40fvStMnFjeKQ" --insecure
+
 
 Service Account Permission:
 ---------------------------

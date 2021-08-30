@@ -9,6 +9,10 @@ Commands:
 ------------
 run shell on container:
 docker exec -it name /bin/bash
+ kubectl exec --stdin --tty -n sample helloworld-v1-776f57d5f6-5mkpf -- /bin/bash
+
+find . -name "*.tfstate*" -type f -delete
+find ./terraform_co_cluster -name "*.tfstate*" -type f -delete
 
 PAYING ACCOUNTS:
 ----------------
