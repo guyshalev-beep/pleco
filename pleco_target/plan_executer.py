@@ -1,5 +1,6 @@
 import yaml
 import os
+import sys
 from deploment_handler import DeploymentHandler
 from service_handler import ServiceHandler
 from filesystem_repository_handler import FilesystemRepositoryHandler
@@ -19,12 +20,16 @@ def get_repository_handler(plan_step_doc):
         pass
     pass
 
-
+# python3 plan_executer ./pleco_target/plans/plan_a.yaml
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print("guy")
-    print(os.system("pwd"))
-with open(r'./pleco_target/plans/plan_a.yaml') as file:
+    plan_file = ""
+    if (len(sys.argv) > 1):
+        plan_file = sys.argv[1]
+    if (plan_file == ""):
+        plan_file = './pleco_target/plans/plan_a.yaml'
+    print("Started Plan Executer with plan:%s" % plan_file)
+with open(r"%s"%plan_file) as file:
     documents = yaml.full_load(file)
     print(documents)
     handlers_doc = documents.get('handlers')
