@@ -10,13 +10,13 @@ from pleco_target_pb2_grpc import K8sGWStub
 def handle_leap_to_new_cluster(sources_doc, step_doc):
     leader_source = [s for s in sources_doc if s['name'] == "leader_source"][0]
     follower_source = [s for s in sources_doc if s['name'] == "follower_source"][0]
-    print("start handle_leap_to_new_cluster from leader:%s to follower:%s" % (leader_source['externalIP'], follower_source['externalIP']))
     yaml = step_doc['resource']['body']
     leader_client = K8sGWStub(grpc.insecure_channel("%s:50051" % leader_source['externalIP']))
     follower_client = K8sGWStub(grpc.insecure_channel("%s:50051" % follower_source['externalIP']))
     ns = step_doc['resource']['namespace']
     resource_name = step_doc['resource']['name']
     # Create on follower
+    print("start handle_leap_to_new_cluster for:%s from leader:%s to follower:%s" % (resource_name,leader_source['externalIP'], follower_source['externalIP']))
 
     service_res = follower_client.ApplyService(
         K8sGWRequest(body=str(yaml) % resource_name, namespace=ns,
@@ -36,11 +36,11 @@ def handle_leap_to_new_cluster(sources_doc, step_doc):
 def handle_standalone(sources_doc, step_doc):
     # deploy to follower source
     source = [s for s in sources_doc if s['name'] == "follower_source"][0]
-    print("start handle_standalone to follower:%s" %source['externalIP'])
     yaml = step_doc['resource']['body']
     follower_client = K8sGWStub(grpc.insecure_channel("%s:50051" % source['externalIP']))
     ns = step_doc['resource']['namespace']
     resource_name = step_doc['resource']['name']
+    print("start handle_standalone for:%s to follower:%s" % (resource_name,source['externalIP']))
     # Create on follower
     service_res = follower_client.ApplyService(
         K8sGWRequest(body=str(yaml), namespace=ns,

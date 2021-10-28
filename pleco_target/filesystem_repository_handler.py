@@ -14,6 +14,7 @@ class FilesystemRepositoryHandler(object):
             fileName = step_doc['resource']['path']
             directoryName = handler_doc['directory']
             resource_path = directoryName + fileName
+            print("opening resource file:%s"%resource_path)
             with open(path.join(path.dirname(__file__), resource_path)) as f:
                 dep = yaml.safe_load(f)
             return dep

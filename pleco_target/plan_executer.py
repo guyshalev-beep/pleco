@@ -31,7 +31,7 @@ if __name__ == '__main__':
     print("Started Plan Executer with plan:%s" % plan_file)
 with open(r"%s"%plan_file) as file:
     documents = yaml.full_load(file)
-    print(documents)
+    #print(documents)
     handlers_doc = documents.get('handlers')
     sources_doc = documents.get('sources')
     plan = documents.get('plan')
