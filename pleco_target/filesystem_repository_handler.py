@@ -8,8 +8,8 @@ class FilesystemRepositoryHandler(object):
 
     def handle(self, handler_doc, step_doc):
         print ("start file handling")
-        print(handler_doc)
-        print(step_doc)
+#        print(handler_doc)
+#        print(step_doc)
         try:
             fileName = step_doc['resource']['path']
             directoryName = handler_doc['directory']

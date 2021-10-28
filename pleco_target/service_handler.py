@@ -36,7 +36,6 @@ def handle_leap_to_new_cluster(sources_doc, step_doc):
 def handle_standalone(sources_doc, step_doc):
     # deploy to follower source
     source = [s for s in sources_doc if s['name'] == "follower_source"][0]
-    print (source)
     print("start handle_standalone to follower:%s" %source['externalIP'])
     yaml = step_doc['resource']['body']
     follower_client = K8sGWStub(grpc.insecure_channel("%s:50051" % source['externalIP']))

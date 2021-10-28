@@ -20,7 +20,7 @@ def get_repository_handler(plan_step_doc):
         pass
     pass
 
-# python3 plan_executer ./pleco_target/plans/plan_a.yaml
+# python3 plan_executer.py /home/pleco2110/pleco/plans/plan_a.yaml
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     plan_file = ""

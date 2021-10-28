@@ -12,18 +12,18 @@ def handle_leap_to_new_cluster(sources_doc, step_doc):
     leader_source = [s for s in sources_doc if s['name'] == "leader_source"][0]
     #follower_source = sources_doc['name' == 'follower_source']
     follower_source = [s for s in sources_doc if s['name'] == "follower_source"][0]
-    print("start handle_leap_to_new_cluster from leader:%s to follower:%s" % (leader_source['externalIP'], follower_source['externalIP']))
     yaml = step_doc['resource']['body']
     leader_client = K8sGWStub(grpc.insecure_channel("%s:50051" % leader_source['externalIP']))
     follower_client = K8sGWStub(grpc.insecure_channel("%s:50051" % follower_source['externalIP']))
     ns = step_doc['resource']['namespace']
     resource_name = step_doc['resource']['name']
+    print("start handle_leap_to_new_cluster for:%s from leader:%s to follower:%s" % (resource_name,leader_source['externalIP'], follower_source['externalIP']))
     # Create on follower
     deployment_res = follower_client.ApplyDeployment(
         K8sGWRequest(body=str(yaml), namespace=ns, client_host=follower_source['api_server'], client_port=str(follower_source['port']),
                      client_token=follower_source['token']))
     print(deployment_res)
-    os.system("kubectl -n %s wait --for=condition=available deployment %s --timeout=5m" % (ns, resource_name))
+    os.system("kubectl -n %s wait --for=condition=available deployment %s --timeout=1m" % (ns, resource_name))
 
     # Delete from Leader
     deploymentRes = leader_client.DeleteDeployment(
@@ -34,19 +34,18 @@ def handle_leap_to_new_cluster(sources_doc, step_doc):
 def handle_standalone(sources_doc, step_doc):
     # deploy to follower source
     source = [s for s in sources_doc if s['name'] == "follower_source"][0]
-    print (source)
-    print("start handle_standalone to follower:%s" %source['externalIP'])
     yaml = step_doc['resource']['body']
     follower_client = K8sGWStub(grpc.insecure_channel("%s:50051" % source['externalIP']))
     ns = step_doc['resource']['namespace']
     resource_name = step_doc['resource']['name']
+    print("start handle_standalone for:%s to follower:%s" % (resource_name,source['externalIP']))
     # Create on follower
     deployment_res = follower_client.ApplyDeployment(
         K8sGWRequest(body=str(yaml), namespace=ns,
                      client_host=source['api_server'], client_port=str(source['port']),
                      client_token=source['token']))
     print(deployment_res)
-    os.system("kubectl -n %s wait --for=condition=available deployment %s --timeout=5m" % (ns, resource_name))
+    os.system("kubectl -n %s wait --for=condition=available deployment %s --timeout=1m" % (ns, resource_name))
 
 class DeploymentHandler(object):
     def __init__(self):
