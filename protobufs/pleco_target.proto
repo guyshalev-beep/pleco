@@ -12,6 +12,8 @@ message K8sGWRequest {
     string client_token = 6;
     string client_host = 7;
     string client_port = 8;
+    string resourceName = 9;
+
 }
 message K8sGWResponse {
     repeated string resources = 1;
@@ -22,5 +24,7 @@ service K8sGW {
     rpc GetNSs (K8sGWRequest) returns (K8sGWResponse);
     rpc ApplyDeployment (K8sGWRequest) returns (K8sGWResponse);
     rpc ApplyService (K8sGWRequest) returns (K8sGWResponse);
+    rpc DeleteDeployment (K8sGWRequest) returns (K8sGWResponse);
+    rpc DeleteService (K8sGWRequest) returns (K8sGWResponse);
     rpc TestConnection (K8sGWRequest) returns (K8sGWResponse);
 }

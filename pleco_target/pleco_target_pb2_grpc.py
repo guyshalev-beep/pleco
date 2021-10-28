@@ -2,8 +2,9 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
+#import pleco_target.pleco_target_pb2 as pleco__target__pb2
+#from pleco_target.pleco_target_pb2 import K8sGWRequest
 import pleco_target_pb2 as pleco__target__pb2
-
 
 class K8sGWStub(object):
     """Missing associated documentation comment in .proto file."""
@@ -26,6 +27,16 @@ class K8sGWStub(object):
                 )
         self.ApplyService = channel.unary_unary(
                 '/K8sGW/ApplyService',
+                request_serializer=pleco__target__pb2.K8sGWRequest.SerializeToString,
+                response_deserializer=pleco__target__pb2.K8sGWResponse.FromString,
+                )
+        self.DeleteDeployment = channel.unary_unary(
+                '/K8sGW/DeleteDeployment',
+                request_serializer=pleco__target__pb2.K8sGWRequest.SerializeToString,
+                response_deserializer=pleco__target__pb2.K8sGWResponse.FromString,
+                )
+        self.DeleteService = channel.unary_unary(
+                '/K8sGW/DeleteService',
                 request_serializer=pleco__target__pb2.K8sGWRequest.SerializeToString,
                 response_deserializer=pleco__target__pb2.K8sGWResponse.FromString,
                 )
@@ -57,6 +68,18 @@ class K8sGWServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def DeleteDeployment(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def DeleteService(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def TestConnection(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -78,6 +101,16 @@ def add_K8sGWServicer_to_server(servicer, server):
             ),
             'ApplyService': grpc.unary_unary_rpc_method_handler(
                     servicer.ApplyService,
+                    request_deserializer=pleco__target__pb2.K8sGWRequest.FromString,
+                    response_serializer=pleco__target__pb2.K8sGWResponse.SerializeToString,
+            ),
+            'DeleteDeployment': grpc.unary_unary_rpc_method_handler(
+                    servicer.DeleteDeployment,
+                    request_deserializer=pleco__target__pb2.K8sGWRequest.FromString,
+                    response_serializer=pleco__target__pb2.K8sGWResponse.SerializeToString,
+            ),
+            'DeleteService': grpc.unary_unary_rpc_method_handler(
+                    servicer.DeleteService,
                     request_deserializer=pleco__target__pb2.K8sGWRequest.FromString,
                     response_serializer=pleco__target__pb2.K8sGWResponse.SerializeToString,
             ),
@@ -142,6 +175,40 @@ class K8sGW(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/K8sGW/ApplyService',
+            pleco__target__pb2.K8sGWRequest.SerializeToString,
+            pleco__target__pb2.K8sGWResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def DeleteDeployment(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/K8sGW/DeleteDeployment',
+            pleco__target__pb2.K8sGWRequest.SerializeToString,
+            pleco__target__pb2.K8sGWResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def DeleteService(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/K8sGW/DeleteService',
             pleco__target__pb2.K8sGWRequest.SerializeToString,
             pleco__target__pb2.K8sGWResponse.FromString,
             options, channel_credentials,

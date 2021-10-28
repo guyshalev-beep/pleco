@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x12pleco_target.proto\" \n\x0cK8sResources\x12\x10\n\x08snippets\x18\x01 \x03(\t\"\xa7\x01\n\x0cK8sGWRequest\x12\x0f\n\x07user_id\x18\x01 \x01(\x05\x12\x0c\n\x04\x62ody\x18\x02 \x01(\t\x12\x10\n\x08\x66ileName\x18\x03 \x01(\t\x12\x11\n\tnamespace\x18\x04 \x01(\t\x12\x13\n\x0b\x63onfig_file\x18\x05 \x01(\t\x12\x14\n\x0c\x63lient_token\x18\x06 \x01(\t\x12\x13\n\x0b\x63lient_host\x18\x07 \x01(\t\x12\x13\n\x0b\x63lient_port\x18\x08 \x01(\t\"?\n\rK8sGWResponse\x12\x11\n\tresources\x18\x01 \x03(\t\x12\x0e\n\x06status\x18\x02 \x01(\x08\x12\x0b\n\x03msg\x18\x03 \x01(\t2\xc2\x01\n\x05K8sGW\x12\'\n\x06GetNSs\x12\r.K8sGWRequest\x1a\x0e.K8sGWResponse\x12\x30\n\x0f\x41pplyDeployment\x12\r.K8sGWRequest\x1a\x0e.K8sGWResponse\x12-\n\x0c\x41pplyService\x12\r.K8sGWRequest\x1a\x0e.K8sGWResponse\x12/\n\x0eTestConnection\x12\r.K8sGWRequest\x1a\x0e.K8sGWResponseb\x06proto3'
+  serialized_pb=b'\n\x12pleco_target.proto\" \n\x0cK8sResources\x12\x10\n\x08snippets\x18\x01 \x03(\t\"\xbd\x01\n\x0cK8sGWRequest\x12\x0f\n\x07user_id\x18\x01 \x01(\x05\x12\x0c\n\x04\x62ody\x18\x02 \x01(\t\x12\x10\n\x08\x66ileName\x18\x03 \x01(\t\x12\x11\n\tnamespace\x18\x04 \x01(\t\x12\x13\n\x0b\x63onfig_file\x18\x05 \x01(\t\x12\x14\n\x0c\x63lient_token\x18\x06 \x01(\t\x12\x13\n\x0b\x63lient_host\x18\x07 \x01(\t\x12\x13\n\x0b\x63lient_port\x18\x08 \x01(\t\x12\x14\n\x0cresourceName\x18\t \x01(\t\"?\n\rK8sGWResponse\x12\x11\n\tresources\x18\x01 \x03(\t\x12\x0e\n\x06status\x18\x02 \x01(\x08\x12\x0b\n\x03msg\x18\x03 \x01(\t2\xa5\x02\n\x05K8sGW\x12\'\n\x06GetNSs\x12\r.K8sGWRequest\x1a\x0e.K8sGWResponse\x12\x30\n\x0f\x41pplyDeployment\x12\r.K8sGWRequest\x1a\x0e.K8sGWResponse\x12-\n\x0c\x41pplyService\x12\r.K8sGWRequest\x1a\x0e.K8sGWResponse\x12\x31\n\x10\x44\x65leteDeployment\x12\r.K8sGWRequest\x1a\x0e.K8sGWResponse\x12.\n\rDeleteService\x12\r.K8sGWRequest\x1a\x0e.K8sGWResponse\x12/\n\x0eTestConnection\x12\r.K8sGWRequest\x1a\x0e.K8sGWResponseb\x06proto3'
 )
 
 
@@ -121,6 +121,13 @@ _K8SGWREQUEST = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='resourceName', full_name='K8sGWRequest.resourceName', index=8,
+      number=9, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -134,7 +141,7 @@ _K8SGWREQUEST = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=57,
-  serialized_end=224,
+  serialized_end=246,
 )
 
 
@@ -179,8 +186,8 @@ _K8SGWRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=226,
-  serialized_end=289,
+  serialized_start=248,
+  serialized_end=311,
 )
 
 DESCRIPTOR.message_types_by_name['K8sResources'] = _K8SRESOURCES
@@ -218,8 +225,8 @@ _K8SGW = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=292,
-  serialized_end=486,
+  serialized_start=314,
+  serialized_end=607,
   methods=[
   _descriptor.MethodDescriptor(
     name='GetNSs',
@@ -252,9 +259,29 @@ _K8SGW = _descriptor.ServiceDescriptor(
     create_key=_descriptor._internal_create_key,
   ),
   _descriptor.MethodDescriptor(
+    name='DeleteDeployment',
+    full_name='K8sGW.DeleteDeployment',
+    index=3,
+    containing_service=None,
+    input_type=_K8SGWREQUEST,
+    output_type=_K8SGWRESPONSE,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='DeleteService',
+    full_name='K8sGW.DeleteService',
+    index=4,
+    containing_service=None,
+    input_type=_K8SGWREQUEST,
+    output_type=_K8SGWRESPONSE,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
     name='TestConnection',
     full_name='K8sGW.TestConnection',
-    index=3,
+    index=5,
     containing_service=None,
     input_type=_K8SGWREQUEST,
     output_type=_K8SGWRESPONSE,
