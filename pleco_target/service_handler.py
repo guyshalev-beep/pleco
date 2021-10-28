@@ -19,7 +19,7 @@ def handle_leap_to_new_cluster(sources_doc, step_doc):
     print("start handle_leap_to_new_cluster for:%s from leader:%s to follower:%s" % (resource_name,leader_source['externalIP'], follower_source['externalIP']))
 
     service_res = follower_client.ApplyService(
-        K8sGWRequest(body=str(yaml) % resource_name, namespace=ns,
+        K8sGWRequest(body=str(yaml) , namespace=ns,
                      client_host=follower_source['api_server'],
                      client_port=str(follower_source['port']),
                      client_token=follower_source['token']))

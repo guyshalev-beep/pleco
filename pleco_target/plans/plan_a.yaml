@@ -6,6 +6,8 @@ handlers:
     name: myDepl
   - type: ServiceHandler
     name: mySrv
+  - type: RedisHandler
+    name: redis
 sources:
   - name: leader_source
     id: leader_source_id

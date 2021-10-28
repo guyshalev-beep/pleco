@@ -17,7 +17,7 @@ def handle_leap_to_new_cluster(sources_doc, step_doc):
     follower_client = K8sGWStub(grpc.insecure_channel("%s:50051" % follower_source['externalIP']))
     ns = step_doc['resource']['namespace']
     resource_name = step_doc['resource']['name']
-    print("start handle_leap_to_new_cluster for:%s from leader:%s to follower:%s" % (resource_name,leader_source['externalIP'], follower_source['externalIP']))
+    print("start REDIS handle_leap_to_new_cluster for:%s from leader:%s to follower:%s" % (resource_name,leader_source['externalIP'], follower_source['externalIP']))
     # Create on follower
     deployment_res = follower_client.ApplyDeployment(
         K8sGWRequest(body=str(yaml), namespace=ns, client_host=follower_source['api_server'], client_port=str(follower_source['port']),
@@ -25,12 +25,22 @@ def handle_leap_to_new_cluster(sources_doc, step_doc):
     print(deployment_res)
     os.system("kubectl --context %s -n %s wait --for=condition=available deployment %s --timeout=1m" % (follower_source['context'],ns, resource_name))
 
+    p = os.popen("kubectl --context %s -n %s get pods -o custom-columns=PodName:.metadata.name | grep redis" % (follower_source['context'],ns))
+    redis_pod = p.read()[:-1]
+
+    print("REDIS ready with POD = %s" % redis_pod)
+    exac_str = "kubectl --context %s -n %s exec -it %s -- redis-cli replicaof redis-cart 6379" % (follower_source['context'],ns, redis_pod)
+    print(exac_str)
+    os.system(exac_str)
+    os.system("sleep 10s")
+
     # Delete from Leader
     deploymentRes = leader_client.DeleteDeployment(
         K8sGWRequest(resourceName=resource_name, namespace=ns, client_host=leader_source['api_server'],
                      client_port=str(leader_source['port']),
                      client_token=leader_source['token']))
     print(deploymentRes)
+# Standalone for redis does not involve any sync. It looks like Standalone Deployment.
 def handle_standalone(sources_doc, step_doc):
     # deploy to follower source
     source = [s for s in sources_doc if s['name'] == "follower_source"][0]
@@ -38,24 +48,23 @@ def handle_standalone(sources_doc, step_doc):
     follower_client = K8sGWStub(grpc.insecure_channel("%s:50051" % source['externalIP']))
     ns = step_doc['resource']['namespace']
     resource_name = step_doc['resource']['name']
-    print("start handle_standalone for:%s to follower:%s" % (resource_name,source['externalIP']))
+    print("start REDIS handle_standalone for:%s to follower:%s" % (resource_name,source['externalIP']))
     # Create on follower
     deployment_res = follower_client.ApplyDeployment(
         K8sGWRequest(body=str(yaml), namespace=ns,
                      client_host=source['api_server'], client_port=str(source['port']),
                      client_token=source['token']))
     print(deployment_res)
-    os.system("kubectl --context %s -n %s wait --for=condition=available deployment %s --timeout=1m" % (source['context'], ns, resource_name))
+    os.system("kubectl -n %s wait --for=condition=available deployment %s --timeout=1m" % (ns, resource_name))
 
-
-class DeploymentHandler(object):
+class RedisHandler(object):
     def __init__(self):
-        print("start DeploymentHandler")
+        print("start RedisHandler")
         pass
 
     def handle(self, sources_doc, step_doc):
         method = step_doc['method']
-        print("start handling with method=%s" % method)
+        print("start REDIS handling with method=%s" % method)
         if method == 'leap_to_new_cluster':
             return handle_leap_to_new_cluster(sources_doc, step_doc)
         if method == 'standalone':

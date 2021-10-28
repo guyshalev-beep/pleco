@@ -147,6 +147,32 @@ class K8sGWService(K8sGWServicer):
         print("after config")
         # v1 = client.CoreV1Api()
         try:
+     #       with open(path.join(path.dirname(__file__), request.fileName)) as f:
+     #           dep = yaml.safe_load(f)
+                dep = yaml.safe_load(request.body)
+                my_api_client = client.ApiClient(aConfiguration)
+                my_api_client.select_header_accept(
+                    ["", "application/json", "application/yaml", "application/vnd.kubernetes.protobuf"])
+
+                k8s_apps_v1 = client.CoreV1Api(aConfiguration)
+                k8s_apps_v1.__init__(api_client=my_api_client)
+                resp = k8s_apps_v1.create_namespaced_service(
+                    body=dep, namespace=request.namespace)
+
+                print("Service created. status='%s'" % resp.metadata.name)
+                return K8sGWResponse(status=True, msg="Service created. status='%s'" % resp.metadata.name)
+        except:
+            e = sys.exc_info()
+            return K8sGWResponse(status=False, msg=str(e))
+
+    def ApplyService_BU(self, request, context):
+        print("start apply service")
+        # self.config_client()
+        aConfiguration = self.config_client_token(client_host=request.client_host, client_port=request.client_port,
+                                                  client_token=request.client_token)
+        print("after config")
+        # v1 = client.CoreV1Api()
+        try:
             with open(path.join(path.dirname(__file__), request.fileName)) as f:
                 dep = yaml.safe_load(f)
                 my_api_client = client.ApiClient(aConfiguration)
