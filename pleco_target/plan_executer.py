@@ -3,6 +3,7 @@ import os
 import sys
 from deploment_handler import DeploymentHandler
 from service_handler import ServiceHandler
+from redis_handler import RedisHandler
 from filesystem_repository_handler import FilesystemRepositoryHandler
 
 
@@ -58,4 +59,6 @@ with open(r"%s"%plan_file) as file:
             handler_object = DeploymentHandler()
         if handler == "ServiceHandler":
             handler_object = ServiceHandler()
+        if handler == "RedisHandler":
+            handler_object = RedisHandler()
         handler_object.handle(sources_doc, plan_step_doc)
