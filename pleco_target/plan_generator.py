@@ -3,7 +3,8 @@ import os
 import sys
 
 
-def generate_sources_file(cluster_leader_context, cluster_follower_context):
+def generate_sources_file(cluster_leader_context, cluster_leader_suffix, cluster_follower_context,
+                          cluster_follower_suffix, plan_file):
     # Extract detailes on Clusters
     #       cluster_leader_context = "gke_%s_%s_%s" % (project_id, cluster_leader.zone, cluster_leader.name)
     p = os.popen(
@@ -50,28 +51,34 @@ def generate_sources_file(cluster_leader_context, cluster_follower_context):
     cluster_follower_token = p.read()
     print("Follower Cluster TOKEN:", cluster_follower_token)
 
-    dict_file = [{'name': 'leader_source', 'id': 'leader_source_id', 'suffix': 'tbd',
-                'externalIP': cluster_leader_externalIP,
-                'token': cluster_leader_token, 'api_server': cluster_leader_api_server, 'port': '443',
-                'context':cluster_leader_context},
-                 {'name': 'follower_source', 'id': 'follower_source_id', 'suffix': 'tbd',
+    dict_file = [{'name': 'leader_source', 'id': 'leader_source_id', 'suffix': cluster_leader_suffix,
+                  'externalIP': cluster_leader_externalIP,
+                  'token': cluster_leader_token, 'api_server': cluster_leader_api_server, 'port': '443',
+                  'context': cluster_leader_context},
+                 {'name': 'follower_source', 'id': 'follower_source_id', 'suffix': cluster_follower_suffix,
                   'externalIP': cluster_follower_externalIP,
                   'token': cluster_follower_token, 'api_server': cluster_follower_api_server, 'port': '443',
                   'context': cluster_follower_context}
                  ]
 
-
-    with open(r'sources_file.yaml', 'w') as file:
+    with open(r"%s" % plan_file, 'w') as file:
         documents = yaml.dump(dict_file, file)
     print("dump")
 
 
+# python3 plan_generator.py gke_pleco-326905_europe-west2-b_pleco-326905-moon -moon gke_pleco-326905_us-west2-b_pleco-326905-moon-co -moon-co /home/pleco2309/pleco/plans/plan_sources.yaml
+
 class PlanGenerator(object):
+    cluster_leader_context = sys.argv[1]
+    cluster_leader_suffix = sys.argv[2]
+    cluster_follower_context = sys.argv[3]
+    cluster_follower_suffix = sys.argv[4]
+    plan_file = sys.argv[5]
 
     def __init__(self, method):
         # print("start FilesystemRepositoryHandler.")
         pass
 
     if __name__ == '__main__':
-        generate_sources_file("gke_pleco-326905_europe-west2-b_pleco-326905-moon",
-                              "gke_pleco-326905_us-west2-b_pleco-326905-moon-co")
+        generate_sources_file(cluster_leader_context, cluster_leader_suffix, cluster_follower_context,
+                              cluster_follower_suffix, plan_file)
