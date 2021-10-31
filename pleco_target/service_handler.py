@@ -52,12 +52,12 @@ def handle_standalone(sources_doc, step_doc):
 
 class ServiceHandler(object):
     def __init__(self):
-        print("start ServiceHandler")
+        # print("start ServiceHandler")
         pass
 
     def handle(self, sources_doc, step_doc):
         method = step_doc['method']
-        print("start handling with method=%s" % method)
+        print("ServiceHandler start handling with method=%s" % method)
         if method == 'leap_to_new_cluster':
             return handle_leap_to_new_cluster(sources_doc, step_doc)
         if method == 'standalone':

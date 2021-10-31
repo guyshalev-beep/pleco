@@ -50,12 +50,12 @@ def handle_standalone(sources_doc, step_doc):
 
 class DeploymentHandler(object):
     def __init__(self):
-        print("start DeploymentHandler")
+        #print("start DeploymentHandler")
         pass
 
     def handle(self, sources_doc, step_doc):
         method = step_doc['method']
-        print("start handling with method=%s" % method)
+        print("DeploymentHandler start handling with method=%s" % method)
         if method == 'leap_to_new_cluster':
             return handle_leap_to_new_cluster(sources_doc, step_doc)
         if method == 'standalone':
