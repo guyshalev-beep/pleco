@@ -1,6 +1,7 @@
 import yaml
 import os
 import sys
+from loader import Loader
 from deploment_handler import DeploymentHandler
 from service_handler import ServiceHandler
 from redis_handler import RedisHandler
@@ -31,7 +32,7 @@ if __name__ == '__main__':
         plan_file = './pleco_target/plans/plan_a.yaml'
     print("Started Plan Executer with plan:%s" % plan_file)
 with open(r"%s"%plan_file) as file:
-    documents = yaml.full_load(file)
+    documents = yaml.load(file, Loader)
     handlers_doc = documents.get('handlers')
     sources_doc = documents.get('sources')
     plan = documents.get('plan')
@@ -47,11 +48,10 @@ with open(r"%s"%plan_file) as file:
         # Repository Handler
         repository_handler = get_repository_handler(plan_step_doc)
         # select the specific resource handler doc which its TYPE equals the plan step's RESOURCE.HANDLER
-        repository_handler_doc = [s for s in handlers_doc if s['type'] == plan_step_doc['resource']['handler']][0]
-
-        body = repository_handler.handle(repository_handler_doc, plan_step_doc);
-   #     print(body)
-        plan_step_doc['resource']['body'] = body
+        if plan_step_doc['resource']['handler'] != None:
+            repository_handler_doc = [s for s in handlers_doc if s['type'] == plan_step_doc['resource']['handler']][0]
+            body = repository_handler.handle(repository_handler_doc, plan_step_doc);
+            plan_step_doc['resource']['body'] = body
 
         # Handler
         handler_object = DeploymentHandler()  # default
@@ -61,6 +61,8 @@ with open(r"%s"%plan_file) as file:
             handler_object = ServiceHandler()
         if handler == "RedisHandler":
             handler_object = RedisHandler()
-        if handler == "LoadBalancerHandler":
+        if handler == "GCPLoadBalancerHandler":
             handler_object = LoadBalancerHandler()
         handler_object.handle(sources_doc, plan_step_doc)
+
+
