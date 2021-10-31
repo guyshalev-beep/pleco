@@ -4,6 +4,7 @@ import sys
 from deploment_handler import DeploymentHandler
 from service_handler import ServiceHandler
 from redis_handler import RedisHandler
+from loadbalancer_handler import LoadBalancerHandler
 from filesystem_repository_handler import FilesystemRepositoryHandler
 
 
@@ -60,4 +61,6 @@ with open(r"%s"%plan_file) as file:
             handler_object = ServiceHandler()
         if handler == "RedisHandler":
             handler_object = RedisHandler()
+        if handler == "LoadBalancerHandler":
+            handler_object = LoadBalancerHandler()
         handler_object.handle(sources_doc, plan_step_doc)

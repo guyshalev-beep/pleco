@@ -48,5 +48,15 @@ plan:
       type: Deployment
       path: deployments/emailservice-deployment.yaml
       handler: FilesystemRepositoryHandler
-
+  - handler: GCPLoadBalancerHandler
+    method: leap #standalone
+    resource:
+      name: gcp.loadbalancer
+      type: LoadBalancer
+      endpoint_group_name: plecoendpointgroup
+      backend_service: plecobeservice
+      target_ip: 80
+      target_service:
+        namespace: istio-system
+        service_name: istio-ingressgateway
 
