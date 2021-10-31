@@ -42,6 +42,7 @@ with open(r"%s"%plan_file) as file:
         method = plan_step_doc['method']
         print ("Start processing: %s" %(plan_step_doc['resource']['name']))
         print ("  - Type: %s" % (plan_step_doc['resource']['type']))
+        print("  - Method: %s" % (method))
         # Repository Handler
         repository_handler = get_repository_handler(plan_step_doc)
         # select the specific resource handler doc which its TYPE equals the plan step's RESOURCE.HANDLER

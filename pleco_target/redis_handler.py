@@ -31,10 +31,12 @@ def handle_leap_to_new_cluster(sources_doc, step_doc):
     print("REDIS ready with POD = %s" % redis_pod)
     exac_str = "kubectl --context %s -n %s exec -it %s -- redis-cli replicaof redis-cart 6379" % (follower_source['context'],ns, redis_pod)
     print(exac_str)
+    os.system(exac_str)
     print ("Synced Redis. go to sleep.")
     os.system("sleep 10s")
     exac_str = "kubectl --context %s -n %s exec -it %s -- redis-cli REPLICAOF NO ONE" % (follower_source['context'],ns, redis_pod)
     print(exac_str)
+    os.system(exac_str)
     print("Stopped ReplicaOf Redis.")
     # Delete from Leader
     deploymentRes = leader_client.DeleteDeployment(
