@@ -5,6 +5,7 @@ import yaml
 class FilesystemRepositoryHandler(object):
     def __init__(self, method):
         #print("start FilesystemRepositoryHandler.")
+        pass
 
     def handle(self, handler_doc, step_doc):
         #print ("start file handling")
