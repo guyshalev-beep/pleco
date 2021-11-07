@@ -5,6 +5,7 @@ from loader import Loader
 from deploment_handler import DeploymentHandler
 from service_handler import ServiceHandler
 from redis_handler import RedisHandler
+from mongodb_handler import MongoDBHandler
 from loadbalancer_handler import LoadBalancerHandler
 from filesystem_repository_handler import FilesystemRepositoryHandler
 
@@ -61,6 +62,8 @@ with open(r"%s"%plan_file) as file:
             handler_object = ServiceHandler()
         if handler == "RedisHandler":
             handler_object = RedisHandler()
+        if handler == "MongoDBHandler":
+            handler_object = MongoDBHandler()
         if handler == "GCPLoadBalancerHandler":
             handler_object = LoadBalancerHandler()
         handler_object.handle(sources_doc, plan_step_doc)
