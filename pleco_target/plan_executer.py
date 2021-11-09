@@ -49,7 +49,7 @@ with open(r"%s"%plan_file) as file:
         # Repository Handler
         repository_handler = get_repository_handler(plan_step_doc)
         # select the specific resource handler doc which its TYPE equals the plan step's RESOURCE.HANDLER
-        if plan_step_doc['resource']['handler'] != None:
+        if plan_step_doc['resource']['handler'] != "":
             repository_handler_doc = [s for s in handlers_doc if s['type'] == plan_step_doc['resource']['handler']][0]
             body = repository_handler.handle(repository_handler_doc, plan_step_doc);
             plan_step_doc['resource']['body'] = body
