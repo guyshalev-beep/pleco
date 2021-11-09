@@ -8,7 +8,7 @@ from redis_handler import RedisHandler
 from mongodb_handler import MongoDBHandler
 from loadbalancer_handler import LoadBalancerHandler
 from filesystem_repository_handler import FilesystemRepositoryHandler
-
+from yaml_handler import YamlHandler
 
 def print_hi(name):
     # Use a breakpoint in the code line below to debug your script.
@@ -60,6 +60,8 @@ with open(r"%s"%plan_file) as file:
             handler_object = DeploymentHandler()
         if handler == "ServiceHandler":
             handler_object = ServiceHandler()
+        if handler == "YamlHandler":
+            handler_object = YamlHandler()
         if handler == "RedisHandler":
             handler_object = RedisHandler()
         if handler == "MongoDBHandler":

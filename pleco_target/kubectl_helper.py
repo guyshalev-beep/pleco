@@ -17,3 +17,8 @@ class KubectlHelper(object):
         os.system("kubectl --context %s -n %s wait --for=condition=ready pod --timeout=60s -l "
                   "statefulset.kubernetes.io/pod-name=%ds-0 "
                   %(context,ns, resource_name))
+
+    @staticmethod
+    def applyYaml(context, ns, file_name):
+        os.system("kubectl --context %s -n %s apply -f %s"
+                  % (context, ns, file_name))
