@@ -2,6 +2,8 @@ import os
 import grpc
 import sys
 
+from pleco_target.kubectl_helper import KubectlHelper
+
 sys.path.append("./pleco_target")
 from pleco_target_pb2 import K8sGWRequest
 from pleco_target_pb2_grpc import K8sGWStub
@@ -15,27 +17,20 @@ def handle_leap_to_new_cluster(sources_doc, step_doc):
     follower_client = K8sGWStub(grpc.insecure_channel("%s:50051" % follower_source['externalIP']))
     ns = step_doc['resource']['namespace']
     resource_name = step_doc['resource']['name']
-    resource_lb_name = step_doc['resource']['lb_name']
+    resource_np_name = step_doc['resource']['np_name']
     print("start MONGODB handle_leap_to_new_cluster for:%s from leader:%s to follower:%s" % (resource_name,leader_source['externalIP'], follower_source['externalIP']))
     # Create on follower
     deployment_res = follower_client.ApplyDeployment(
         K8sGWRequest(body=str(yaml), namespace=ns, client_host=follower_source['api_server'], client_port=str(follower_source['port']),
                      client_token=follower_source['token']))
     print(deployment_res)
-    os.system("kubectl --context %s -n %s wait --for=condition=ready pod --timeout=60s -l "
-              "statefulset.kubernetes.io/pod-name=%ds-0 "
-              %(follower_source['context'],ns, resource_name))
-
+    KubectlHelper.waitForStatefulsetCondition(follower_source['context'],ns, resource_name)
     p = os.popen("kubectl --context %s -n %s get pods -o custom-columns=PodName:.metadata.name | grep %s" % (follower_source['context'],ns, resource_name))
     mongo_pod = p.read()[:-1]
 
     print("MONGODB ready with POD = %s" % mongo_pod)
-    p = os.popen("kubectl --context %s -n %s get service %s -o jsonpath='{.status.loadBalancer.ingress[0].ip}'"
-                 % (follower_source['context'],ns, resource_lb_name))
-    mongo_follower_host = p.read()[:-1]
-    p = os.popen("kubectl --context %s -n %s get service %s -o jsonpath='{.status.loadBalancer.ingress[0].ip}'"
-                 % (leader_source['context'],ns, resource_lb_name))
-    mongo_leader_host = p.read()[:-1]
+    mongo_follower_host = KubectlHelper.getNodePortIP(follower_source['context'],ns, resource_np_name)
+    mongo_leader_host = KubectlHelper.getNodePortIP(leader_source['context'], ns, resource_np_name)
     # LEADER:
     # add follower as secondary
     with open(r"script1_leader.js", 'w') as file:
