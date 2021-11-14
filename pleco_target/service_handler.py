@@ -1,6 +1,7 @@
 import os
 import grpc
 import sys
+from kubectl_helper import KubectlHelper
 
 sys.path.append("./pleco_target")
 from pleco_target_pb2 import K8sGWRequest

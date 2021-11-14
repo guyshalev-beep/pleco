@@ -1,11 +1,10 @@
 import yaml
-import os
 import sys
 from loader import Loader
 from deploment_handler import DeploymentHandler
 from service_handler import ServiceHandler
 from redis_handler import RedisHandler
-from mongodb_handler import MongoDBHandler
+from pleco_target.handlers.mongodb_handler import MongoDBHandler
 from loadbalancer_handler import LoadBalancerHandler
 from filesystem_repository_handler import FilesystemRepositoryHandler
 from yaml_handler import YamlHandler
