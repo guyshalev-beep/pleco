@@ -5,17 +5,18 @@ import subprocess
 from create_follower import PlecoService
 from create_follower import DataClassCluster
 
-param_leader_name = "pleco-326905-moon"
+param_leader_name = "acme-331809-moon"
 param_leader_zone = "europe-west2-b"
 param_leader_region = "europe-west2"
 param_leader_suffix = "-moon"
-param_follower_name = "pleco-326905-moon-co"
+param_follower_name = "acme-331809-moon-co"
 param_follower_zone = "us-west2-b"
 param_follower_region = "us-west2"
 param_follower_suffix = "-moon-co"
-param_plan_resource_file = "/home/pleco2309/pleco/plans/plan_sources.yaml"
-param_plan_file = "/home/pleco2309/pleco/plans/acme_plan_a.yaml"
-param_istio_defaults = "/home/pleco2309/terraform/terraform_production/cluster1/istio-defaults.yaml"
+param_plan_resource_file = "/home/pleco1111/pleco/plans/plan_sources.yaml"
+param_plan_file = "/home/pleco1111/pleco/plans/acme_plan_a.yaml"
+param_istio_defaults = "/home/pleco1111/terraform/terraform_production/cluster1/istio-defaults.yaml"
+param_terraform_folder = "/home/pleco1111/terraform/"
 
 number_of_leaps = sys.argv[1]
 leap_period = sys.argv[2]  # in seconds
@@ -24,9 +25,8 @@ user_name = sys.argv[4]
 avoide_update_leader = sys.argv[5]  # if true, leader will not be installed (standalone for follower)
 cross = sys.argv[6]  # if true, leader will be LEAP cluster and NOT the PRODUCTION cluster
 avoid_delete_state = sys.argv[7]  # if true, Terraform state will not be deleted from follower scripts
-avoide_delete_leader = sys.argv[
-    8]  # if true, the leader cluster will remain - in case another leap is scheduled - it will definatly fail as the cluster is still there.
-# python3 main.py 1 0 pleco-326905 pleco2309@shalev-family.com false false false true
+avoide_delete_leader = sys.argv[8]  # if true, the leader cluster will remain - in case another leap is scheduled - it will definatly fail as the cluster is still there.
+# python3 main.py 1 0 acme-331809 pleco1111@shalev-family.com true true false true
 
 print("Pleco Leap Trriger is set for %s leaps with period: %s" % (number_of_leaps, leap_period))
 cluster_production = DataClassCluster(name=param_leader_name, zone=param_leader_zone, region=param_leader_region,
@@ -52,7 +52,7 @@ for counter in range(int(number_of_leaps)):
     #### clean all follower cluster terraform state
     if (avoid_delete_state != "true"):
         print("cleaning terraform state")
-        os.system("find ../terraform/terraform_co_cluster -name \"*.tfstate*\" -type f -delete")
+        os.system("find %sterraform_co_cluster -name \"*.tfstate*\" -type f -delete"%param_terraform_folder)
     #### create follower cluster
 
     result = PlecoService.create_follower(cluster_leader, cluster_follower, gcp_project_id, user_name)
@@ -70,7 +70,7 @@ for counter in range(int(number_of_leaps)):
         result = PlecoService.install_pleco(cluster_leader, gcp_project_id, user_name)
     #### install pleco on follower cluster
     result = PlecoService.install_pleco(cluster_follower, gcp_project_id, user_name)
-
+    """
     #### leap online-boutique app
     os.system("kubectl --context %s create namespace online-boutique" % cluster_follower.context)
     os.system("kubectl --context %s label namespace online-boutique istio-injection=enabled" % cluster_follower.context)
@@ -109,4 +109,5 @@ for counter in range(int(number_of_leaps)):
         print("-------------")
         print("-------------")
         time.sleep(int(leap_period))
+        """
 print("Pleco leap ended.")

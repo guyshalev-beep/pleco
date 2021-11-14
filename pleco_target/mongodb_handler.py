@@ -1,8 +1,9 @@
 import os
 import grpc
 import sys
+import yaml
 
-from pleco_target.kubectl_helper import KubectlHelper
+from kubectl_helper import KubectlHelper
 
 sys.path.append("./pleco_target")
 from pleco_target_pb2 import K8sGWRequest
@@ -12,7 +13,7 @@ from pleco_target_pb2_grpc import K8sGWStub
 def handle_leap_to_new_cluster(sources_doc, step_doc):
     leader_source = [s for s in sources_doc if s['name'] == "leader_source"][0]
     follower_source = [s for s in sources_doc if s['name'] == "follower_source"][0]
-    yaml = step_doc['resource']['body']
+    yaml_ = step_doc['resource']['body']
     leader_client = K8sGWStub(grpc.insecure_channel("%s:50051" % leader_source['externalIP']))
     follower_client = K8sGWStub(grpc.insecure_channel("%s:50051" % follower_source['externalIP']))
     ns = step_doc['resource']['namespace']
@@ -20,10 +21,13 @@ def handle_leap_to_new_cluster(sources_doc, step_doc):
     resource_np_name = step_doc['resource']['np_name']
     print("start MONGODB handle_leap_to_new_cluster for:%s from leader:%s to follower:%s" % (resource_name,leader_source['externalIP'], follower_source['externalIP']))
     # Create on follower
-    deployment_res = follower_client.ApplyDeployment(
-        K8sGWRequest(body=str(yaml), namespace=ns, client_host=follower_source['api_server'], client_port=str(follower_source['port']),
-                     client_token=follower_source['token']))
-    print(deployment_res)
+    # at the moment, my client cant handle statefulset. create with kubectl
+    #deployment_res = follower_client.ApplyDeployment(
+    #    K8sGWRequest(body=str(yaml), namespace=ns, client_host=follower_source['api_server'], client_port=str(follower_source['port']),
+    #                 client_token=follower_source['token']))
+    #print(deployment_res)
+    KubectlHelper.applyYaml(follower_source['context'], ns, step_doc['resource']['path'])
+
     KubectlHelper.waitForStatefulsetCondition(follower_source['context'],ns, resource_name)
     p = os.popen("kubectl --context %s -n %s get pods -o custom-columns=PodName:.metadata.name | grep %s" % (follower_source['context'],ns, resource_name))
     mongo_pod = p.read()[:-1]
@@ -64,14 +68,14 @@ def handle_leap_to_new_cluster(sources_doc, step_doc):
 def handle_standalone(sources_doc, step_doc):
     # deploy to follower source
     source = [s for s in sources_doc if s['name'] == "follower_source"][0]
-    yaml = step_doc['resource']['body']
+    yaml_ = step_doc['resource']['body']
     follower_client = K8sGWStub(grpc.insecure_channel("%s:50051" % source['externalIP']))
     ns = step_doc['resource']['namespace']
     resource_name = step_doc['resource']['name']
     print("start MONGODB handle_standalone for:%s to follower:%s" % (resource_name,source['externalIP']))
     # Create on follower
     deployment_res = follower_client.ApplyDeployment(
-        K8sGWRequest(body=str(yaml), namespace=ns,
+        K8sGWRequest(body=str(yaml_), namespace=ns,
                      client_host=source['api_server'], client_port=str(source['port']),
                      client_token=source['token']))
     print(deployment_res)

@@ -1,4 +1,6 @@
 import os
+import time
+
 class KubectlHelper(object):
     @staticmethod
     def getLoadBalancerIP(context, ns, resource_lb_name):
@@ -15,8 +17,17 @@ class KubectlHelper(object):
     @staticmethod
     def waitForStatefulsetCondition(context, ns, resource_name):
         os.system("kubectl --context %s -n %s wait --for=condition=ready pod --timeout=60s -l "
-                  "statefulset.kubernetes.io/pod-name=%ds-0 "
+                  "statefulset.kubernetes.io/pod-name=%s-0 "
                   %(context,ns, resource_name))
+
+    @staticmethod
+    def waitForLBServiceCondition(context, ns, resource_name, timeout):
+        print("Waiting (for %is)for LoadBalancer Service %s"%(timeout, resource_name), sep=' ', end='', flush=True)
+        ip = KubectlHelper.getLoadBalancerIP(context,ns,resource_name)
+        for i in range(timeout):
+            print(".", sep=' ', end='', flush=True)
+            time.sleep(1)
+        print (ip)
 
     @staticmethod
     def applyYaml(context, ns, file_name):
